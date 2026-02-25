@@ -35,16 +35,3 @@ jobs:
           IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/backend:latest
           docker build -t $IMAGE .
           docker push $IMAGE
-
-      - name: Update Container App (optional)
-        if: ${{ secrets.CONTAINERAPP_NAME != '' && secrets.CONTAINERAPP_ENV != '' }}
-        env:
-          CONTAINERAPP_NAME: ${{ secrets.CONTAINERAPP_NAME }}
-          CONTAINERAPP_ENV: ${{ secrets.CONTAINERAPP_ENV }}
-          RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
-          ACR_NAME: ${{ secrets.ACR_NAME }}
-        run: |
-          az containerapp update \
-            -n "$CONTAINERAPP_NAME" \
-            -g "$RESOURCE_GROUP" \
-            --image "$ACR_NAME.azurecr.io/backend:latest"
