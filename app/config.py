@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 from pydantic_settings import BaseSettings # NEW CORRECT WAY
 # Carrega variáveis do arquivo .env (criar depois)
 load_dotenv()
-
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Bilingui-AI"
     API_VERSION: str = "v1"
