@@ -1,0 +1,69 @@
+# Core FastAPI stack
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic
+pydantic-settings
+python-dotenv
+
+# Database + ORM
+sqlalchemy
+alembic
+databases
+
+# Auth
+passlib[bcrypt]
+python-jose[cryptography]
+
+# AI e Machine Learning - Produção
+openai-whisper
+torch
+transformers
+sentence-transformers
+spacy
+librosa
+soundfile
+scipy
+numpy
+pandas
+scikit-learn
+SpeechRecognition[audio] # Adicionado aqui!
+
+# Processamento de áudio
+ffmpeg-python
+PyDub
+
+# Análise de texto
+textstat
+textblob
+nltk
+
+# IA e requisições externas
+openai
+httpx
+requests
+
+# Background tasks e utilitários
+aiofiles
+email-validator
+python-slugify
+asyncio
+
+# Análise de dados
+matplotlib
+seaborn
+plotly
+
+# Dev tools
+ipython
+pytest
+pytest-asyncio
+jupyter
+
+# Para SQLite local
+aiosqlite
+asyncpg
+
+# Logging e monitoramento
+structlog
+prometheus-client
