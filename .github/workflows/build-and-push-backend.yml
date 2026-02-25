@@ -1,0 +1,54 @@
+name: Build and Push Backend to ACR
+
+on:
+  push:
+    branches: [ master, main ]
+    paths:
+      - "backend/**"
+      - ".github/workflows/build-and-push-backend.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: ACR Login
+        uses: azure/docker-login@v2
+        with:
+          login-server: ${{ secrets.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Build and Push Backend Image
+        working-directory: backend
+        run: |
+          IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/backend:latest
+          docker build -t $IMAGE .
+          docker push $IMAGE
+
+      - name: Update Container App (optional)
+        if: ${{ env.CONTAINERAPP_NAME != '' }}
+        env:
+          CONTAINERAPP_NAME: ${{ secrets.CONTAINERAPP_NAME }}
+          CONTAINERAPP_ENV: ${{ secrets.CONTAINERAPP_ENV }}
+          RESOURCE_GROUP: ${{ secrets.RESOURCE_GROUP }}
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+        run: |
+          az containerapp update \
+            -n "$CONTAINERAPP_NAME" \
+            -g "$RESOURCE_GROUP" \
+            --image "$ACR_NAME.azurecr.io/backend:latest"
