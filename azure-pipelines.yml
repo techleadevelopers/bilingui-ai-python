@@ -1,0 +1,22 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  ACR_NAME: bilinguiacr
+
+steps:
+- checkout: self
+  clean: true
+
+- task: Docker@2
+  displayName: Build and push
+  inputs:
+    command: buildAndPush
+    repository: $(ACR_NAME).azurecr.io/backend
+    tags: latest
+    dockerfile: backend/Dockerfile
+    containerRegistry: acr-docker-bilingui
+    buildContext: backend
