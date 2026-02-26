@@ -6,17 +6,25 @@ pool:
 
 variables:
   ACR_NAME: bilinguiacr
+  ACR_LOGIN_SERVER: bilinguiacr.azurecr.io
 
 steps:
 - checkout: self
   clean: true
 
-- task: Docker@2
-  displayName: Build and push
+- task: Bash@3
+  displayName: Login, build and push
+  env:
+    AZURE_CLIENT_ID: $(AZURE_CLIENT_ID)
+    AZURE_CLIENT_SECRET: $(AZURE_CLIENT_SECRET)
+    AZURE_TENANT_ID: $(AZURE_TENANT_ID)
+    ACR_NAME: $(ACR_NAME)
+    ACR_LOGIN_SERVER: $(ACR_LOGIN_SERVER)
   inputs:
-    command: buildAndPush
-    repository: $(ACR_NAME).azurecr.io/backend
-    tags: latest
-    dockerfile: backend/Dockerfile
-    containerRegistry: acr-docker-bilingui
-    buildContext: backend
+    targetType: inline
+    script: |
+      set -e
+      az login --service-principal -u $AZURE_CLIENT_ID -p $AZURE_CLIENT_SECRET --tenant $AZURE_TENANT_ID
+      az acr login -n $ACR_NAME
+      docker build -t $ACR_LOGIN_SERVER/backend:latest backend
+      docker push $ACR_LOGIN_SERVER/backend:latest
