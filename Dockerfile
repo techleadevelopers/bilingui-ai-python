@@ -4,10 +4,14 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Dependências do sistema
+# Dependências do sistema (inclui toolchain e headers de áudio para PyAudio)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libsndfile1 \
+    portaudio19-dev \
+    gcc \
+    g++ \
+    make \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
