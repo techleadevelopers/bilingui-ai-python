@@ -16,9 +16,9 @@ passlib[bcrypt]
 python-jose[cryptography]
 
 # AI e Machine Learning - Produção
+# Usa torch CPU do canal oficial (sem sufixo +cpu) para compatibilidade com Railway
+torch==2.2.2
 openai-whisper
-# Torch CPU wheel direto do index oficial para reduzir download e evitar CUDA
-torch==2.2.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
 transformers
 sentence-transformers
 spacy
