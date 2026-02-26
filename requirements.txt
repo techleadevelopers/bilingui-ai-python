@@ -16,11 +16,12 @@ passlib[bcrypt]
 python-jose[cryptography]
 
 # AI e Machine Learning - Produção
-# Usa torch CPU do canal oficial (sem sufixo +cpu) para compatibilidade com Railway
-torch==2.2.2
+# Pinned to avoid ABI break and match sentence-transformers/transformers
+numpy==1.26.4
+torch==2.4.1
 openai-whisper
-transformers
-sentence-transformers
+transformers==4.44.2
+sentence-transformers==3.0.1
 spacy
 librosa
 soundfile

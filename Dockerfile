@@ -2,7 +2,8 @@
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PIP_EXTRA_INDEX_URL=https://download.pytorch.org/whl/cpu
 
 # Dependências do sistema (inclui toolchain e headers de áudio para PyAudio)
 RUN apt-get update && apt-get install -y --no-install-recommends \
