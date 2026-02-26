@@ -17,7 +17,8 @@ python-jose[cryptography]
 
 # AI e Machine Learning - Produção
 openai-whisper
-torch
+# Torch CPU wheel direto do index oficial para reduzir download e evitar CUDA
+torch==2.2.0+cpu -f https://download.pytorch.org/whl/torch_stable.html
 transformers
 sentence-transformers
 spacy

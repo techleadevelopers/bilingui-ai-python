@@ -1,24 +1,28 @@
-# Etapa base com Python + FFmpeg + suporte a IA
+# Base leve com Python + FFmpeg
 FROM python:3.11-slim
 
-# Instala dependências do sistema
-RUN apt-get update && apt-get install -y \
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Dependências do sistema
+RUN apt-get update && apt-get install -y --no-install-recommends \
     ffmpeg \
     libsndfile1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Diretório da aplicação
 WORKDIR /app
 
-# Copia os arquivos
+# Copia requirements separado para cachear melhor
+COPY requirements.txt .
+
+# Instala dependências (sem cache para reduzir layer)
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copia código
 COPY . .
 
-# Instala dependências
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
-# Expõe a porta
 EXPOSE 8000
 
-# Comando para iniciar o backend
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Usa a porta do ambiente (Railway define PORT)
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
